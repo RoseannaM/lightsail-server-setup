@@ -141,31 +141,46 @@ quit psql and exit the postgres user
 ```$ sudo apt-get install git```
 <br/>
 Go to the www directory
+<br/>
 ```$ cd /var/www```
+<br/>
 Clone to project
+<br/>
 ```$ sudo git clone https://github.com/RoseannaM/catalog```
+<br/>
 Rename it to FlaskApp
+<br/>
 ```$ sudo mv ./catalog ./FlaskApp```
+<br/>
 ```$ cd FlaskApp```
+<br/>
 Rename main to __init__
+<br/>
 ```$ sudo mv main.py __init__.py```
-
+<br/>
 Update the engine path in all the files that use it to the below
+<br/>
 ```python
 engine = create_engine('postgresql://catalog:{password}@localhost/catalog')
 ```
+
 Install Pip and the dependencies
 ```$ sudo apt-get install python-pip```
+<br/>
 ```$ sudo pip install -r requirements.txt```
 
 Create the database
+<br/>
 ```$ sudo python database.py````
-
+<br/>
 
 ## Create a new Virtual Host: [Walkthrough to Setting up Virual Host ](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
 Edit the FlaskApp.conf fille
+<br/>
 ```$ sudo nano /etc/apache2/sites-available/FlaskApp.conf```
+<br/>
 Paste the below
+
 ```
 <VirtualHost *:80>
         ServerName 34.210.213.40
@@ -187,14 +202,6 @@ Paste the below
 </VirtualHost>
 ```
 Restart the server
+<br/>
 ```$ sudo apache2ctl restart```
 
-
-
-
-i. The IP address and SSH port so your server can be accessed by the reviewer.
-ii. The complete URL to your hosted web application.
-iii. A summary of software you installed and configuration changes made.
-iv. A list of any third-party resources you made use of to complete this project.
-Locate the SSH key you created for the grader user.
-During the submission process, paste the contents of the grader user's SSH key into the "Notes to Reviewer" field.
