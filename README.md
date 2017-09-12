@@ -6,7 +6,7 @@ Details for the configuration of a Virtual Private Server (Making it private)
 
 **Public IP:** 4.210.213.40
 **Port:** 2200
-**Url:** http://ec2-34-210-213-40.us-west-2.compute.amazonaws.com/toystores/
+**Url:** http://ec2-34-210-213-40.us-west-2.compute.amazonaws.com
 
 In order to deploy your application, you will need to configure your Lightsail VPS and secure it. 
 ## Login 
@@ -96,6 +96,98 @@ Set the Firewall to only allow incoming connections for SSH port 2200, NTP port 
 ```$ sudo ufw allow 123/udp```
 <br/>
 ```$ sudo ufw enable ```
+
+## Confirm Timezone is Set to UTC
+```$ sudo dpkg-reconfigure tzdata```
+
+## Install and configure Apache2
+```$ sudo apt-get install apache2```
+Confirm is is working by going to localhost:8080 in your browser
+Install mod_wsgi
+<br/>
+```$ sudo apt-get install libapache2-mod-wsgi```
+
+
+Edit the 000-default-file
+<br/>
+```$ sudo vim /etc/apache2/sites-enabled/000-default.conf```
+
+## Install and configure Postgresql
+```$ sudo apt-get install postgresql```
+Ensure remote connections are not authorised
+<br/>
+```$ sudo vim /etc/postgresql/9.5/main/pg_hba.conf```
+local postgres should be set to **md5** not **peer**
+
+Change to the postgres user
+<br/>
+```$ sudo su - postgres```
+<br/>
+run psql and create a new user and database
+<br/>
+```$ psql```
+<br/>
+```$ postgres=# CREATE DATABASE catalog```
+<br/>
+```$ postgres=# CREATE USER catalog WITH PASSWORD '{password}```
+<br/>
+Give the user permission to access the database
+<br/>
+```$ postgres=# GRANT ALL PRIVILEGES ON DATABASE catalog TO catalog```
+<br/>
+quit psql and exit the postgres user
+
+## Install Git and Clone your Catalouge Project: [Catalog](https://github.com/RoseannaM/catalog)
+```$ sudo apt-get install git```
+<br/>
+Go to the www directory
+```$ cd /var/www```
+Clone to project
+```$ sudo git clone https://github.com/RoseannaM/catalog```
+Rename it to FlaskApp
+```$ sudo mv ./catalog ./FlaskApp```
+```$ cd FlaskApp```
+Rename main to __init__
+```$ sudo mv main.py __init__.py```
+
+Update the engine path in all the files that use it to the below
+```python
+engine = create_engine('postgresql://catalog:{password}@localhost/catalog')
+```
+Install Pip and the dependencies
+```$ sudo apt-get install python-pip```
+```$ sudo pip install -r requirements.txt```
+
+Create the database
+```$ sudo python database.py````
+
+
+## Create a new Virtual Host: [Walkthrough to Setting up Virual Host ](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
+Edit the FlaskApp.conf fille
+```$ sudo nano /etc/apache2/sites-available/FlaskApp.conf```
+Paste the below
+```
+<VirtualHost *:80>
+        ServerName 34.210.213.40
+        ServerAlias ec2-34-210-213-40.us-west-2.compute.amazonaws.com
+        ServerAdmin admin@gmail.com
+        WSGIScriptAlias / /var/www/FlaskApp/flaskapp.wsgi
+        <Directory /var/www/FlaskApp/>
+                Order allow,deny
+                Allow from all
+        </Directory>
+        Alias /static /var/www/FlaskApp/static
+        <Directory /var/www/FlaskApp/static/>
+                Order allow,deny
+                Allow from all
+        </Directory>
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        LogLevel warn
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+Restart the server
+```$ sudo apache2ctl restart```
 
 
 
