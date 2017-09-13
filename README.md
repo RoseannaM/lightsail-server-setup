@@ -4,7 +4,7 @@ Details for the configuration of a Virtual Private Server (Making it private)
 <a href="https://www.ubuntu.com/"><img src="http://icons.iconarchive.com/icons/martz90/circle/48/ubuntu-icon.png" width="50" height="50" alt="Ubuntu logo"></a> <a href="https://www.apache.org/"><img src="https://www.apache.org/foundation/press/kit/poweredBy/Apache_PoweredBy.png" alt="Apache logo" width="50" height="50"></a> 
 <a href="https://aws.amazon.com/"><img src="http://icons.iconarchive.com/icons/designbolts/handstitch-social/256/Aws-icon.png" alt="Amazon logo" width="50" height="50"></a>
 
-**Public IP:** 4.210.213.40
+**Public IP:** 34.210.213.40
 **Port:** 2200
 **Url:** http://ec2-34-210-213-40.us-west-2.compute.amazonaws.com
 
